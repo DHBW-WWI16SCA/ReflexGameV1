@@ -27,14 +27,16 @@
             android:text="1"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:onClick="buttonHit"/>
 
         <Button
             android:id="@+id/button2"
-            android:text="2"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:text="2"
+            android:onClick="buttonHit"/>
 
 
     </LinearLayout>
@@ -50,20 +52,23 @@
             android:text="3"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:onClick="buttonHit"/>
 
         <Button
             android:id="@+id/button4"
             android:text="4"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:onClick="buttonHit"/>
 
 
     </LinearLayout>
 
 
     <TextView
+        android:id="@+id/tv_score"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Score: 0"
@@ -73,6 +78,7 @@
         />
 
     <TextView
+        android:id="@+id/tv_countdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="30 seconds left"
