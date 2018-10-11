@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ReflexGame</string>
+    <string name="header_gamename">ReflexGame</string>
+    <string name="lbl_playername">Playername</string>
+    <string name="hint_enter_name">Enter your name</string>
+    <string name="lbl_level">Level</string>
+    <string name="btn_readytostart">Ready to Start</string>
+    <string name="lbl_highscore">Highscore</string>
+    <string name="btn_startgame">Start Game</string>
+    <string name="header_hitbutton">Hit the active button</string>
+</resources>

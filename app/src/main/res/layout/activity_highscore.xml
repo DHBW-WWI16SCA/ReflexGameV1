@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ersteapp.dietzm.de.reflexgame.HighscoreActivity">
+
+    <TextView
+        android:id="@+id/lbl_headertext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/header_gamename"
+
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+
+        style="@style/HeaderText"
+        />
+
+    <Button
+        android:id="@+id/btn_startgame"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_startgame"
+        android:onClick="startGame"
+
+        android:layout_below="@id/lbl_headertext"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginTop="30dp"
+        />
+
+    
+    <ListView
+        android:id="@+id/lv_highscore"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        >
+
+    </ListView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_highscore"
+
+        android:layout_above="@+id/lv_highscore"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
