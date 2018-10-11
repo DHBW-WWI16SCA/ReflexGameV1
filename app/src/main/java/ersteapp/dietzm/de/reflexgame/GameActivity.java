@@ -1,10 +1,14 @@
 package ersteapp.dietzm.de.reflexgame;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -39,6 +43,12 @@ public class GameActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SeekBar inpLevel = (SeekBar) findViewById(R.id.inp_level);
+        int level = sharedPref.getInt("LEVEL", 0);
+
+        buttonTimeToBeat = 3 - level;
+
         score = 0;
         countdown = COUNTDOWN_START;
 
@@ -61,10 +71,15 @@ public class GameActivity extends Activity {
             @Override
             public void run() {
                 countdown--;
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         tvCountdown.setText(countdown + " seconds left");
+
+                        if(countdown <= 0) {
+                            finish();
+                        }
                     }
                 });
             }
