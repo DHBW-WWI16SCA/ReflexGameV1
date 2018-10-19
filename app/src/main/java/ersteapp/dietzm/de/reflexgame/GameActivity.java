@@ -1,16 +1,21 @@
 package ersteapp.dietzm.de.reflexgame;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import ersteapp.dietzm.de.reflexgame.R;
@@ -19,6 +24,7 @@ import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.DatabaseHe
 import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.model.HighscoreEntry;
 
 public class GameActivity extends Activity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +39,8 @@ public class GameActivity extends Activity {
     private int score;
     private int countdown;
     private int activeButton = -1;
-    private int buttonTime;
 
+    private ScheduledFuture<?> buttonChecker;
     private int buttonTimeToBeat = 1;
 
     private static final int COUNTDOWN_START = 30;
@@ -42,6 +48,12 @@ public class GameActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SeekBar inpLevel = (SeekBar) findViewById(R.id.inp_level);
+        int level = sharedPref.getInt("LEVEL", 0);
+
+        buttonTimeToBeat = 3 - level;
 
         score = 0;
         countdown = COUNTDOWN_START;
@@ -54,40 +66,33 @@ public class GameActivity extends Activity {
         buttons[2] = (Button) findViewById(R.id.button3);
         buttons[3] = (Button) findViewById(R.id.button4);
 
+        activateNewButton();
+        startCountdown();
 
+    }
 
+    private void startCountdown() {
         ScheduledExecutorService ste = Executors.newScheduledThreadPool(5);
         ste.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-
                 countdown--;
-                buttonTime--;
-
-                if(activeButton == -1 || buttonTime <= 0){
-                    activateNewButton();
-                }
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        checkButtonStatus();
-
                         tvCountdown.setText(countdown + " seconds left");
 
-                        if(countdown <= 0){
-                            finalizeGame();
-
+                        if(countdown <= 0) {
+                            finish();
 
                         }
                     }
                 });
             }
         }, 1, 1, TimeUnit.SECONDS);
-
-
     }
+
 
     private void finalizeGame() {
 
@@ -103,6 +108,7 @@ public class GameActivity extends Activity {
     }
 
     private void checkButtonStatus() {
+
         for(int i = 0; i < buttons.length; i++){
             buttons[i].setEnabled(false);
             buttons[i].setBackgroundColor(Color.rgb(210,210,210));
@@ -110,28 +116,41 @@ public class GameActivity extends Activity {
 
         buttons[activeButton].setBackgroundColor(Color.rgb(170,170,255));
         buttons[activeButton].setEnabled(true);
-
     }
 
+    public void buttonHit(View view){
+        score += 10;
+        buttonChecker.cancel(false);
+        tvScore.setText("Score: " + score);
+        activateNewButton();
+    }
+
+
     private void activateNewButton() {
-        buttonTime = buttonTimeToBeat;
+
+        //Define new active button index
         int newActiveId = 0;
         do {
             newActiveId = new Random().nextInt(4);
         } while(newActiveId == activeButton);
         activeButton = newActiveId;
-    }
 
-    public void buttonHit(View view){
-        score += 10;
-        activateNewButton();
-        checkButtonStatus();
-        
-        updateScoreTV();
-    }
+        //Update the rendering
+        updateButtonRendering();
 
-    private void updateScoreTV() {
-        tvScore.setText("Score: " + score);
+        //Schedule end of button lifetime
+        ScheduledExecutorService ste = Executors.newScheduledThreadPool(5);
+        buttonChecker = ste.schedule(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        activateNewButton();
+                    }
+                });
+            }
+        },buttonTimeToBeat,TimeUnit.SECONDS);
     }
 
 
