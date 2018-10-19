@@ -54,8 +54,6 @@ public class GameActivity extends Activity {
         buttons[2] = (Button) findViewById(R.id.button3);
         buttons[3] = (Button) findViewById(R.id.button4);
 
-
-
         ScheduledExecutorService ste = Executors.newScheduledThreadPool(5);
         ste.scheduleAtFixedRate(new Runnable() {
             @Override
