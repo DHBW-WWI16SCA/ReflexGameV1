@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import ersteapp.dietzm.de.reflexgame.R;
+import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.DatabaseContract;
+import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.DatabaseHelper;
+import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.model.HighscoreEntry;
 
 public class GameActivity extends Activity {
 
@@ -79,6 +85,7 @@ public class GameActivity extends Activity {
 
                         if(countdown <= 0) {
                             finish();
+
                         }
                     }
                 });
@@ -86,7 +93,22 @@ public class GameActivity extends Activity {
         }, 1, 1, TimeUnit.SECONDS);
     }
 
-    private void updateButtonRendering() {
+
+    private void finalizeGame() {
+
+        HighscoreEntry entry = new HighscoreEntry();
+        entry.setPlayer("HANS");
+        entry.setLevel(1);
+        entry.setScore(score);
+
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        db.createHighscoreEntry(entry);
+
+        finish();
+    }
+
+    private void checkButtonStatus() {
+
         for(int i = 0; i < buttons.length; i++){
             buttons[i].setEnabled(false);
             buttons[i].setBackgroundColor(Color.rgb(210,210,210));

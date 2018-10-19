@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import ersteapp.dietzm.de.reflexgame.R;
+import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.DatabaseHelper;
 
 public class StartActivity extends Activity {
 
@@ -17,6 +18,9 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        db.getReadableDatabase();
     }
 
     @Override
