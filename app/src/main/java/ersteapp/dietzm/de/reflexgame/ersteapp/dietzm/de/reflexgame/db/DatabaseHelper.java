@@ -6,16 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.Date;
+
 import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.model.HighscoreEntry;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
-    private static int DB_VERSION = 1;
-
-
+    private static int DB_VERSION = 3;
 
     public DatabaseHelper(Context context) {
-
         super(context, DatabaseContract.DB_NAME, null, DB_VERSION);
     }
 
@@ -27,13 +26,30 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         createTableHighscore += DatabaseContract.Highscore._ID + " INTEGER PRIMARY KEY, ";
         createTableHighscore += DatabaseContract.Highscore.COLUMN_PLAYER + " NVARCHAR(255), ";
         createTableHighscore += DatabaseContract.Highscore.COLUMN_LEVEL + " INTEGER, ";
-        createTableHighscore += DatabaseContract.Highscore.COLUMN_SCORE + " INTEGER ) ";
+        createTableHighscore += DatabaseContract.Highscore.COLUMN_SCORE + " INTEGER, ";
+        createTableHighscore += DatabaseContract.Highscore.COLUMN_DATE + " INTEGER,";
+        createTableHighscore += DatabaseContract.Highscore.COLUMN_WRONGCLICKCNT + " INTEGER )";
 
         db.execSQL(createTableHighscore);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if(oldVersion == 1 && newVersion >= 2){
+            String alterTableHighscore = "";
+            alterTableHighscore += "ALTER TABLE " + DatabaseContract.Highscore.TABLE_NAME + " ";
+            alterTableHighscore += " ADD " + DatabaseContract.Highscore.COLUMN_DATE + " INTEGER";
+
+            db.execSQL(alterTableHighscore);
+        }
+
+        if(oldVersion <= 2 && newVersion >= 3){
+            String alterTableHighscore = "";
+            alterTableHighscore += "ALTER TABLE " + DatabaseContract.Highscore.TABLE_NAME + " ";
+            alterTableHighscore += " ADD " + DatabaseContract.Highscore.COLUMN_WRONGCLICKCNT + " INTEGER";
+
+            db.execSQL(alterTableHighscore);
+        }
 
     }
 
@@ -43,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         cv.put(DatabaseContract.Highscore.COLUMN_PLAYER, entry.getPlayer());
         cv.put(DatabaseContract.Highscore.COLUMN_LEVEL, entry.getLevel());
         cv.put(DatabaseContract.Highscore.COLUMN_SCORE, entry.getScore());
+        cv.put(DatabaseContract.Highscore.COLUMN_DATE, new Long(new Date().getTime()).intValue());
 
         SQLiteDatabase dbWriter = getWritableDatabase();
         dbWriter.insert(DatabaseContract.Highscore.TABLE_NAME, null, cv);
