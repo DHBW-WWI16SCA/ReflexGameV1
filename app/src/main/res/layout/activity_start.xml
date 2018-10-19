@@ -32,6 +32,7 @@
         />
 
     <EditText
+        android:id="@+id/inp_playername"
         android:layout_width="match_parent"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
@@ -55,6 +56,7 @@
         />
 
     <SeekBar
+        android:id="@+id/inp_level"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
