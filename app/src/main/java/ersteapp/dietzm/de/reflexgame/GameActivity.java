@@ -22,6 +22,7 @@ import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.model.High
 
 public class GameActivity extends Activity {
 
+    private ScheduledFuture<?> schedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class GameActivity extends Activity {
 
     private void startCountdown() {
         ScheduledExecutorService ste = Executors.newScheduledThreadPool(5);
-        ste.scheduleAtFixedRate(new Runnable() {
+        schedule = ste.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 countdown--;
@@ -91,15 +92,19 @@ public class GameActivity extends Activity {
 
     private void finalizeGame() {
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         HighscoreEntry entry = new HighscoreEntry();
-        entry.setPlayer("HANS");
-        entry.setLevel(1);
+        entry.setPlayer(sharedPref.getString("PLAYER_NAME", ""));
+        entry.setLevel(sharedPref.getInt("LEVEL",0));
         entry.setScore(score);
 
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
         db.createHighscoreEntry(entry);
 
+        schedule.cancel(true);
         finish();
+
     }
 
 
