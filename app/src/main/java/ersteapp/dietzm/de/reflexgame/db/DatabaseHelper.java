@@ -1,14 +1,13 @@
-package ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db;
+package ersteapp.dietzm.de.reflexgame.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import ersteapp.dietzm.de.reflexgame.db.model.HighscoreEntry;
 import java.util.Date;
 
-import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.model.HighscoreEntry;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
@@ -35,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
         if(oldVersion == 1 && newVersion >= 2){
             String alterTableHighscore = "";
             alterTableHighscore += "ALTER TABLE " + DatabaseContract.Highscore.TABLE_NAME + " ";

@@ -10,9 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import ersteapp.dietzm.de.reflexgame.R;
-import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.DatabaseHelper;
-import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.model.HighscoreEntry;
+import ersteapp.dietzm.de.reflexgame.db.DatabaseHelper;
+
+import ersteapp.dietzm.de.reflexgame.db.model.HighscoreEntry;
 
 public class HighscoreActivity extends Activity {
 

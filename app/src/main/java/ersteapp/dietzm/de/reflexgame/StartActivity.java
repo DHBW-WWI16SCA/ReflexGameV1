@@ -20,7 +20,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import ersteapp.dietzm.de.reflexgame.R;
-import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.DatabaseHelper;
+import ersteapp.dietzm.de.reflexgame.backend.PlayerRegistrationTask;
+import ersteapp.dietzm.de.reflexgame.db.DatabaseHelper;
 
 public class StartActivity extends Activity {
 
@@ -73,38 +74,40 @@ public class StartActivity extends Activity {
             Toast.makeText(this,"Error during Connection" + e.toString(), Toast.LENGTH_LONG).show();
         }
 
-        Intent i = new Intent(this, HighscoreActivity.class);
-        startActivity(i);
+
 
     }
 
     private void sendPlayerToServer(String playername, int level) throws Exception {
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+       // StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+       // StrictMode.setThreadPolicy(policy);
 
         ConnectivityManager con = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = con.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
 
-            String urlStr = "http://space-labs.appspot.com/repo/465001/player_add.sjs";
-            String dataToTransfer = "?name=" + playername + "&level=" + level;
-
-            InputStream is = null;
-
-            URL url = new URL( urlStr + dataToTransfer);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("POST");
-            conn.connect();
-
-            int response = conn.getResponseCode();
-            System.out.println("RESPONSE CODE FROM HTTP PLAYER ADD: " + response);
+            //Call Async Task
+            PlayerRegistrationTask registerPlayer = new PlayerRegistrationTask(this);
+            registerPlayer.execute(playername, new Integer(level).toString());
 
         } else {
             Toast.makeText(this,"Connection not available", Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    public void playerIsRegistered(final String result) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(getApplicationContext(), HighscoreActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
 }

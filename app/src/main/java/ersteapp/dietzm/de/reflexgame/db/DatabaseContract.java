@@ -1,4 +1,4 @@
-package ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db;
+package ersteapp.dietzm.de.reflexgame.db;
 
 import android.provider.BaseColumns;
 

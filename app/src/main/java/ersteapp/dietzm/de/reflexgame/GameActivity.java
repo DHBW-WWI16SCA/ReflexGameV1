@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -17,8 +16,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.DatabaseHelper;
-import ersteapp.dietzm.de.reflexgame.ersteapp.dietzm.de.reflexgame.db.model.HighscoreEntry;
+import ersteapp.dietzm.de.reflexgame.db.DatabaseHelper;
+import ersteapp.dietzm.de.reflexgame.db.model.HighscoreEntry;
 
 public class GameActivity extends Activity {
 
@@ -106,8 +105,6 @@ public class GameActivity extends Activity {
         finish();
 
     }
-
-
 
     private void updateButtonRendering() {
         for(int i = 0; i < buttons.length; i++){
